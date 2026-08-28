@@ -583,6 +583,30 @@
   if (!("speechSynthesis" in window)) {
     document.body.classList.add("no-tts");
   } else {
+    let voices = [];
+    function loadVoices() { voices = window.speechSynthesis.getVoices(); }
+    loadVoices();
+    if ("onvoiceschanged" in window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function pickVoice(langCode) {
+      if (!voices.length) loadVoices();
+      const lower = langCode.toLowerCase();
+      const prefix = lower.split("-")[0];
+      let v = voices.find((v) => v.lang.toLowerCase() === lower);
+      if (v) return v;
+      v = voices.find((v) => v.lang.toLowerCase().startsWith(prefix + "-"));
+      if (v) return v;
+      v = voices.find((v) => v.lang.toLowerCase() === prefix);
+      if (v) return v;
+      if (prefix === "zh") {
+        v = voices.find((v) => v.lang.toLowerCase().startsWith("zh"));
+        if (v) return v;
+      }
+      return null;
+    }
+
     document.getElementById("lines").addEventListener("click", (e) => {
       const btn = e.target.closest(".speak-btn");
       if (!btn) return;
@@ -590,7 +614,13 @@
       if (!text) return;
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = btn.dataset.lang;
+      const voice = pickVoice(btn.dataset.lang);
+      if (voice) {
+        utter.voice = voice;
+        utter.lang = voice.lang;
+      } else {
+        utter.lang = btn.dataset.lang;
+      }
       utter.rate = 0.95;
       document.querySelectorAll(".speak-btn.speaking").forEach((b) => b.classList.remove("speaking"));
       btn.classList.add("speaking");
