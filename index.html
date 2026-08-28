@@ -1,7 +1,7 @@
 <title>오늘의 한마디</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Baloo+2:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Baloo+2:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -222,7 +222,7 @@
   .line.ko .txt { font-weight: 700; }
   .line.en .txt { font-family: "Baloo 2", sans-serif; font-weight: 500; color: var(--ink-soft); }
   .line.es .txt { font-family: "Baloo 2", sans-serif; font-weight: 500; color: var(--ink-soft); }
-  .line.zh .txt { font-family: "Noto Sans TC", sans-serif; }
+  .line.zh .txt { font-family: "Noto Sans SC", sans-serif; }
   .zh-wrap { display: flex; flex-direction: column; gap: 4px; }
   .pinyin { font-family: "Baloo 2", sans-serif; font-size: 0.84rem; font-style: italic; color: var(--ink-soft); }
 
@@ -384,7 +384,7 @@
         <span class="line1">오늘의</span>
         <span class="line2">한마디</span>
       </h1>
-      <p class="hero-sub">당신의 하루를 여는 동기부여 한 문장을 한국어·영어·스페인어·중국어(번체) 4개 언어로 매일 보여드려요.</p>
+      <p class="hero-sub">당신의 하루를 여는 동기부여 한 문장을 한국어·영어·스페인어·중국어 4개 언어로 매일 보여드려요.</p>
       <a class="cta" href="#today">오늘의 문장 보기 ↓</a>
     </div>
     <div class="mascot-wrap">
@@ -445,7 +445,7 @@
             <div class="line ko"><span class="tag">KO</span><span class="txt" id="txt-ko"></span><button class="speak-btn" data-target="txt-ko" data-lang="ko-KR" data-gtl="ko" aria-label="한국어 발음 듣기">🔊</button></div>
             <div class="line en"><span class="tag">EN</span><span class="txt" id="txt-en"></span><button class="speak-btn" data-target="txt-en" data-lang="en-US" data-gtl="en" aria-label="영어 발음 듣기">🔊</button></div>
             <div class="line es"><span class="tag">ES</span><span class="txt" id="txt-es"></span><button class="speak-btn" data-target="txt-es" data-lang="es-ES" data-gtl="es" aria-label="스페인어 발음 듣기">🔊</button></div>
-            <div class="line zh"><span class="tag">ZH</span><span class="zh-wrap"><span class="txt" id="txt-zh"></span><span class="pinyin" id="txt-zh-py"></span></span><button class="speak-btn" data-target="txt-zh" data-lang="zh-TW" data-gtl="zh-TW" aria-label="중국어 발음 듣기">🔊</button></div>
+            <div class="line zh"><span class="tag">ZH</span><span class="zh-wrap"><span class="txt" id="txt-zh"></span><span class="pinyin" id="txt-zh-py"></span></span><button class="speak-btn" data-target="txt-zh" data-lang="zh-CN" data-gtl="zh-CN" aria-label="중국어 발음 듣기">🔊</button></div>
           </div>
         </div>
       </div>
@@ -479,7 +479,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
         </div>
         <h4>4개 언어 동시 표기</h4>
-        <p>한국어·영어·스페인어·중국어(번체) 문장을 한 화면에서 나란히 볼 수 있어요.</p>
+        <p>한국어·영어·스페인어·중국어 문장을 한 화면에서 나란히 볼 수 있어요.</p>
       </div>
       <div class="how-card">
         <div class="how-icon">
@@ -496,36 +496,36 @@
 
 <script>
   const QUOTES = [
-    { ko: "작은 발걸음도 결국 앞으로 나아가게 합니다.", en: "Small steps still move you forward.", es: "Los pequeños pasos igual te hacen avanzar.", zh: "小小的一步,也能帶你向前。", py: "Xiǎoxiǎo de yí bù, yě néng dài nǐ xiàng qián." },
+    { ko: "작은 발걸음도 결국 앞으로 나아가게 합니다.", en: "Small steps still move you forward.", es: "Los pequeños pasos igual te hacen avanzar.", zh: "小小的一步,也能带你向前。", py: "Xiǎoxiǎo de yí bù, yě néng dài nǐ xiàng qián." },
     { ko: "오늘의 노력이 내일의 힘이 됩니다.", en: "Your effort today is tomorrow's strength.", es: "El esfuerzo de hoy es la fuerza de mañana.", zh: "今天的努力,是明天的力量。", py: "Jīntiān de nǔlì, shì míngtiān de lìliàng." },
-    { ko: "쉬어가는 것도 여정의 일부이지, 끝이 아닙니다.", en: "Rest is part of the journey, not the end of it.", es: "Descansar es parte del camino, no el final.", zh: "休息是旅程的一部分,而不是終點。", py: "Xiūxi shì lǚchéng de yíbùfèn, ér búshì zhōngdiǎn." },
-    { ko: "완벽하지 않아도 시작할 수 있습니다.", en: "You don't need to be perfect to begin.", es: "No necesitas ser perfecto para empezar.", zh: "不必完美,也可以開始。", py: "Búbì wánměi, yě kěyǐ kāishǐ." },
-    { ko: "매일 떠오르는 해는 새로운 페이지입니다.", en: "Every sunrise is a fresh page.", es: "Cada amanecer es una página en blanco.", zh: "每一次日出,都是嶄新的一頁。", py: "Měi yí cì rìchū, dōu shì zhǎnxīn de yí yè." },
-    { ko: "실패보다 의심이 더 많은 꿈을 좌절시킵니다.", en: "Doubt kills more dreams than failure ever will.", es: "La duda mata más sueños que el fracaso.", zh: "懷疑比失敗,更能扼殺夢想。", py: "Huáiyí bǐ shībài, gèng néng èshā mèngxiǎng." },
-    { ko: "완벽함이 아니라 나아감이 중요합니다.", en: "Progress, not perfection.", es: "Progreso, no perfección.", zh: "重要的不是完美,而是進步。", py: "Zhòngyào de búshì wánměi, érshì jìnbù." },
-    { ko: "가장 어려운 건 시작하는 것, 당신은 이미 해냈습니다.", en: "The hardest part is showing up — you just did.", es: "Lo más difícil es presentarse, y tú ya lo hiciste.", zh: "最難的是邁出第一步,而你已經做到了。", py: "Zuì nán de shì màichū dìyī bù, ér nǐ yǐjīng zuòdàole." },
-    { ko: "당신이 반복하는 것이 곧 당신이 됩니다.", en: "What you practice, you become.", es: "Te conviertes en lo que practicas.", zh: "你反復做的事,終將成為你。", py: "Nǐ fǎnfù zuò de shì, zhōng jiāng chéngwéi nǐ." },
-    { ko: "느린 걸음도 결국 나아가는 것입니다.", en: "Slow progress is still progress.", es: "El progreso lento sigue siendo progreso.", zh: "慢慢來,也是在前進。", py: "Mànmàn lái, yě shì zài qiánjìn." },
-    { ko: "할 수 있다고 믿는 순간, 이미 절반은 이룬 것입니다.", en: "Believe you can, and you're halfway there.", es: "Cree que puedes, y ya vas a mitad de camino.", zh: "相信自己能做到,就已經成功了一半。", py: "Xiāngxìn zìjǐ néng zuòdào, jiù yǐjīng chénggōngle yíbàn." },
-    { ko: "하루하루면 충분합니다.", en: "One day at a time is enough.", es: "Basta con un día a la vez.", zh: "一天一天,就足夠了。", py: "Yìtiān yìtiān, jiù zúgòule." },
-    { ko: "당신의 속도는 당신만의 것, 계속 나아가세요.", en: "Your pace is your own; keep moving.", es: "Tu ritmo es tuyo; sigue avanzando.", zh: "你的節奏由你決定,只管前行。", py: "Nǐ de jiézòu yóu nǐ juédìng, zhǐguǎn qiánxíng." },
-    { ko: "용기는 단 한 걸음에서 시작됩니다.", en: "Courage starts with a single step.", es: "El valor comienza con un solo paso.", zh: "勇氣,始於邁出的第一步。", py: "Yǒngqì, shǐyú màichū de dìyī bù." },
-    { ko: "오늘의 노력이 내일의 이야기를 씁니다.", en: "Today's effort writes tomorrow's story.", es: "El esfuerzo de hoy escribe la historia de mañana.", zh: "今天的努力,書寫明天的故事。", py: "Jīntiān de nǔlì, shūxiě míngtiān de gùshi." },
+    { ko: "쉬어가는 것도 여정의 일부이지, 끝이 아닙니다.", en: "Rest is part of the journey, not the end of it.", es: "Descansar es parte del camino, no el final.", zh: "休息是旅程的一部分,而不是终点。", py: "Xiūxi shì lǚchéng de yíbùfèn, ér búshì zhōngdiǎn." },
+    { ko: "완벽하지 않아도 시작할 수 있습니다.", en: "You don't need to be perfect to begin.", es: "No necesitas ser perfecto para empezar.", zh: "不必完美,也可以开始。", py: "Búbì wánměi, yě kěyǐ kāishǐ." },
+    { ko: "매일 떠오르는 해는 새로운 페이지입니다.", en: "Every sunrise is a fresh page.", es: "Cada amanecer es una página en blanco.", zh: "每一次日出,都是崭新的一页。", py: "Měi yí cì rìchū, dōu shì zhǎnxīn de yí yè." },
+    { ko: "실패보다 의심이 더 많은 꿈을 좌절시킵니다.", en: "Doubt kills more dreams than failure ever will.", es: "La duda mata más sueños que el fracaso.", zh: "怀疑比失败,更能扼杀梦想。", py: "Huáiyí bǐ shībài, gèng néng èshā mèngxiǎng." },
+    { ko: "완벽함이 아니라 나아감이 중요합니다.", en: "Progress, not perfection.", es: "Progreso, no perfección.", zh: "重要的不是完美,而是进步。", py: "Zhòngyào de búshì wánměi, érshì jìnbù." },
+    { ko: "가장 어려운 건 시작하는 것, 당신은 이미 해냈습니다.", en: "The hardest part is showing up — you just did.", es: "Lo más difícil es presentarse, y tú ya lo hiciste.", zh: "最难的是迈出第一步,而你已经做到了。", py: "Zuì nán de shì màichū dìyī bù, ér nǐ yǐjīng zuòdàole." },
+    { ko: "당신이 반복하는 것이 곧 당신이 됩니다.", en: "What you practice, you become.", es: "Te conviertes en lo que practicas.", zh: "你反复做的事,终将成为你。", py: "Nǐ fǎnfù zuò de shì, zhōng jiāng chéngwéi nǐ." },
+    { ko: "느린 걸음도 결국 나아가는 것입니다.", en: "Slow progress is still progress.", es: "El progreso lento sigue siendo progreso.", zh: "慢慢来,也是在前进。", py: "Mànmàn lái, yě shì zài qiánjìn." },
+    { ko: "할 수 있다고 믿는 순간, 이미 절반은 이룬 것입니다.", en: "Believe you can, and you're halfway there.", es: "Cree que puedes, y ya vas a mitad de camino.", zh: "相信自己能做到,就已经成功了一半。", py: "Xiāngxìn zìjǐ néng zuòdào, jiù yǐjīng chénggōngle yíbàn." },
+    { ko: "하루하루면 충분합니다.", en: "One day at a time is enough.", es: "Basta con un día a la vez.", zh: "一天一天,就足够了。", py: "Yìtiān yìtiān, jiù zúgòule." },
+    { ko: "당신의 속도는 당신만의 것, 계속 나아가세요.", en: "Your pace is your own; keep moving.", es: "Tu ritmo es tuyo; sigue avanzando.", zh: "你的节奏由你决定,只管前行。", py: "Nǐ de jiézòu yóu nǐ juédìng, zhǐguǎn qiánxíng." },
+    { ko: "용기는 단 한 걸음에서 시작됩니다.", en: "Courage starts with a single step.", es: "El valor comienza con un solo paso.", zh: "勇气,始于迈出的第一步。", py: "Yǒngqì, shǐyú màichū de dìyī bù." },
+    { ko: "오늘의 노력이 내일의 이야기를 씁니다.", en: "Today's effort writes tomorrow's story.", es: "El esfuerzo de hoy escribe la historia de mañana.", zh: "今天的努力,书写明天的故事。", py: "Jīntiān de nǔlì, shūxiě míngtiān de gùshi." },
     { ko: "일곱 번 넘어져도 여덟 번 일어서면 됩니다.", en: "Fall seven times, stand up eight.", es: "Cae siete veces, levántate ocho.", zh: "跌倒七次,爬起八次。", py: "Diēdǎo qī cì, páqǐ bā cì." },
-    { ko: "작은 승리들이 모여 큰 꿈이 됩니다.", en: "Small wins build big dreams.", es: "Las pequeñas victorias construyen grandes sueños.", zh: "小小的勝利,匯聚成大大的夢想。", py: "Xiǎoxiǎo de shènglì, huìjù chéng dàdà de mèngxiǎng." },
-    { ko: "인내는 조용한 형태의 힘입니다.", en: "Patience is a quiet kind of strength.", es: "La paciencia es una fuerza silenciosa.", zh: "耐心,是一種安靜的力量。", py: "Nàixīn, shì yìzhǒng ānjìng de lìliàng." },
-    { ko: "당신은 생각보다 훨씬 강합니다.", en: "You are stronger than you think.", es: "Eres más fuerte de lo que crees.", zh: "你比自己想像的更堅強。", py: "Nǐ bǐ zìjǐ xiǎngxiàng de gèng jiānqiáng." },
+    { ko: "작은 승리들이 모여 큰 꿈이 됩니다.", en: "Small wins build big dreams.", es: "Las pequeñas victorias construyen grandes sueños.", zh: "小小的胜利,汇聚成大大的梦想。", py: "Xiǎoxiǎo de shènglì, huìjù chéng dàdà de mèngxiǎng." },
+    { ko: "인내는 조용한 형태의 힘입니다.", en: "Patience is a quiet kind of strength.", es: "La paciencia es una fuerza silenciosa.", zh: "耐心,是一种安静的力量。", py: "Nàixīn, shì yìzhǒng ānjìng de lìliàng." },
+    { ko: "당신은 생각보다 훨씬 강합니다.", en: "You are stronger than you think.", es: "Eres más fuerte de lo que crees.", zh: "你比自己想象的更坚强。", py: "Nǐ bǐ zìjǐ xiǎngxiàng de gèng jiānqiáng." },
     { ko: "아주 작은 빛도 어둠을 밝힙니다.", en: "Even the smallest light breaks the dark.", es: "Hasta la luz más pequeña vence la oscuridad.", zh: "再微弱的光,也能照破黑暗。", py: "Zài wēiruò de guāng, yě néng zhàopò hēi'àn." },
-    { ko: "계속 나아가세요. 필요한 모든 것은 오게 되어 있습니다.", en: "Keep going. Everything you need will come.", es: "Sigue adelante. Todo lo que necesitas llegará.", zh: "繼續前行,你需要的一切終將到來。", py: "Jìxù qiánxíng, nǐ xūyào de yíqiè zhōngjiāng dàolái." },
-    { ko: "평온한 마음이 분명한 길을 찾습니다.", en: "A calm mind finds a clear way.", es: "Una mente tranquila encuentra un camino claro.", zh: "平靜的心,能找到清晰的路。", py: "Píngjìng de xīn, néng zhǎodào qīngxī de lù." },
-    { ko: "성장은 익숙함 밖에 있습니다.", en: "Growth lives outside your comfort zone.", es: "El crecimiento vive fuera de tu zona de confort.", zh: "成長,存在於舒適區之外。", py: "Chéngzhǎng, cúnzài yú shūshì qū zhīwài." },
-    { ko: "시작하기 가장 좋은 때는 바로 지금입니다.", en: "The best time to start is now.", es: "El mejor momento para empezar es ahora.", zh: "開始的最好時機,就是現在。", py: "Kāishǐ de zuìhǎo shíjī, jiùshì xiànzài." },
-    { ko: "모든 전문가도 처음엔 초보자였습니다.", en: "Every expert was once a beginner.", es: "Todo experto alguna vez fue principiante.", zh: "每一位專家,都曾是新手。", py: "Měi yí wèi zhuānjiā, dōu céng shì xīnshǒu." },
-    { ko: "당신의 유일한 경쟁자는 어제의 자신입니다.", en: "Your only competition is who you were yesterday.", es: "Tu única competencia es quien fuiste ayer.", zh: "你唯一的對手,是昨天的自己。", py: "Nǐ wéiyī de duìshǒu, shì zuótiān de zìjǐ." },
-    { ko: "험한 길은 종종 아름다운 곳으로 이어집니다.", en: "Difficult roads often lead to beautiful places.", es: "Los caminos difíciles suelen llevar a lugares hermosos.", zh: "崎嶇的路,常常通向美麗的遠方。", py: "Qíqū de lù, chángcháng tōngxiàng měilì de yuǎnfāng." },
-    { ko: "결과만이 아니라 과정을 믿으세요.", en: "Trust the process, not just the outcome.", es: "Confía en el proceso, no solo en el resultado.", zh: "相信過程,而不僅僅是結果。", py: "Xiāngxìn guòchéng, ér bùjǐnjǐn shì jiéguǒ." },
-    { ko: "자신에게 다정한 것은 나약함이 아닙니다.", en: "Kindness to yourself is not weakness.", es: "Ser amable contigo mismo no es debilidad.", zh: "善待自己,不是軟弱。", py: "Shàndài zìjǐ, búshì ruǎnruò." },
-    { ko: "내일은 오늘의 행동에 달려 있습니다.", en: "Tomorrow depends on what you do today.", es: "El mañana depende de lo que hagas hoy.", zh: "明天,取決於今天的行動。", py: "Míngtiān, qǔjué yú jīntiān de xíngdòng." }
+    { ko: "계속 나아가세요. 필요한 모든 것은 오게 되어 있습니다.", en: "Keep going. Everything you need will come.", es: "Sigue adelante. Todo lo que necesitas llegará.", zh: "继续前行,你需要的一切终将到来。", py: "Jìxù qiánxíng, nǐ xūyào de yíqiè zhōngjiāng dàolái." },
+    { ko: "평온한 마음이 분명한 길을 찾습니다.", en: "A calm mind finds a clear way.", es: "Una mente tranquila encuentra un camino claro.", zh: "平静的心,能找到清晰的路。", py: "Píngjìng de xīn, néng zhǎodào qīngxī de lù." },
+    { ko: "성장은 익숙함 밖에 있습니다.", en: "Growth lives outside your comfort zone.", es: "El crecimiento vive fuera de tu zona de confort.", zh: "成长,存在于舒适区之外。", py: "Chéngzhǎng, cúnzài yú shūshì qū zhīwài." },
+    { ko: "시작하기 가장 좋은 때는 바로 지금입니다.", en: "The best time to start is now.", es: "El mejor momento para empezar es ahora.", zh: "开始的最好时机,就是现在。", py: "Kāishǐ de zuìhǎo shíjī, jiùshì xiànzài." },
+    { ko: "모든 전문가도 처음엔 초보자였습니다.", en: "Every expert was once a beginner.", es: "Todo experto alguna vez fue principiante.", zh: "每一位专家,都曾是新手。", py: "Měi yí wèi zhuānjiā, dōu céng shì xīnshǒu." },
+    { ko: "당신의 유일한 경쟁자는 어제의 자신입니다.", en: "Your only competition is who you were yesterday.", es: "Tu única competencia es quien fuiste ayer.", zh: "你唯一的对手,是昨天的自己。", py: "Nǐ wéiyī de duìshǒu, shì zuótiān de zìjǐ." },
+    { ko: "험한 길은 종종 아름다운 곳으로 이어집니다.", en: "Difficult roads often lead to beautiful places.", es: "Los caminos difíciles suelen llevar a lugares hermosos.", zh: "崎岖的路,常常通向美丽的远方。", py: "Qíqū de lù, chángcháng tōngxiàng měilì de yuǎnfāng." },
+    { ko: "결과만이 아니라 과정을 믿으세요.", en: "Trust the process, not just the outcome.", es: "Confía en el proceso, no solo en el resultado.", zh: "相信过程,而不仅仅是结果。", py: "Xiāngxìn guòchéng, ér bùjǐnjǐn shì jiéguǒ." },
+    { ko: "자신에게 다정한 것은 나약함이 아닙니다.", en: "Kindness to yourself is not weakness.", es: "Ser amable contigo mismo no es debilidad.", zh: "善待自己,不是软弱。", py: "Shàndài zìjǐ, búshì ruǎnruò." },
+    { ko: "내일은 오늘의 행동에 달려 있습니다.", en: "Tomorrow depends on what you do today.", es: "El mañana depende de lo que hagas hoy.", zh: "明天,取决于今天的行动。", py: "Míngtiān, qǔjué yú jīntiān de xíngdòng." }
   ];
 
   const WEEKDAYS_KO = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
