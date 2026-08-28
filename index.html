@@ -593,17 +593,14 @@
     if (!voices.length) loadVoices();
     const lower = langCode.toLowerCase();
     const prefix = lower.split("-")[0];
-    let v = voices.find((v) => v.lang.toLowerCase() === lower);
-    if (v) return v;
-    v = voices.find((v) => v.lang.toLowerCase().startsWith(prefix + "-"));
-    if (v) return v;
-    v = voices.find((v) => v.lang.toLowerCase() === prefix);
-    if (v) return v;
-    if (prefix === "zh") {
-      v = voices.find((v) => v.lang.toLowerCase().startsWith("zh"));
-      if (v) return v;
-    }
-    return null;
+    const candidates = voices.filter((v) => {
+      const vl = v.lang.toLowerCase();
+      return vl === lower || vl.startsWith(prefix + "-") || vl === prefix || (prefix === "zh" && vl.startsWith("zh"));
+    });
+    if (!candidates.length) return null;
+    const score = (v) => (/premium|enhanced|neural/i.test(v.name) ? 2 : /siri/i.test(v.name) ? 1 : 0);
+    candidates.sort((a, b) => score(b) - score(a));
+    return candidates[0];
   }
 
   function speakSystem(text, langCode, onDone) {
@@ -632,6 +629,12 @@
       document.querySelectorAll(".speak-btn.speaking").forEach((b) => b.classList.remove("speaking"));
       btn.classList.add("speaking");
       const done = () => btn.classList.remove("speaking");
+
+      const voice = pickVoice(btn.dataset.lang);
+      if (voice) {
+        speakSystem(text, btn.dataset.lang, done);
+        return;
+      }
 
       const url = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + encodeURIComponent(text) + "&tl=" + btn.dataset.gtl + "&client=tw-ob";
       const audio = new Audio(url);
