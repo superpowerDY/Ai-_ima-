@@ -346,15 +346,13 @@
     color: var(--ink-soft);
     margin: 0 0 24px;
   }
-  .review-list { display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; }
+  .review-list { display: flex; flex-direction: column; gap: 14px; max-height: 560px; overflow-y: auto; padding-right: 4px; }
   .review-item {
     background: var(--cream);
-    border-radius: 14px;
-    padding: 12px 18px;
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
+    border-radius: 16px;
+    padding: 16px 20px 18px;
   }
+  .review-item .review-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
   .review-item .review-num {
     font-family: "Do Hyeon", sans-serif;
     font-size: 0.9rem;
@@ -362,11 +360,62 @@
     flex-shrink: 0;
     min-width: 1.6em;
   }
-  .review-item .review-ko { font-weight: 700; color: var(--ink); font-size: 0.96rem; }
-  .review-item .review-en { font-size: 0.82rem; color: var(--ink-soft); margin-top: 2px; }
+  .review-item .review-ko { font-weight: 700; color: var(--ink); font-size: 1rem; }
   .review-empty { text-align: center; color: var(--ink-soft); font-size: 0.9rem; padding: 20px 0; }
   .review-list::-webkit-scrollbar { width: 8px; }
   .review-list::-webkit-scrollbar-thumb { background: var(--maroon); border-radius: 4px; }
+
+  .quiz-row { display: grid; grid-template-columns: 34px 1fr 26px; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .quiz-row .quiz-tag {
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 800;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    background: var(--maroon);
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 0;
+  }
+  .quiz-input {
+    width: 100%;
+    border: 2px solid var(--rose-light);
+    background: var(--white);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    color: var(--ink);
+    box-sizing: border-box;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--maroon); }
+  .quiz-input.correct { border-color: #4a9c5e; background: #eef8f0; }
+  .quiz-input.incorrect { border-color: #d1503f; background: #fdefed; }
+  .quiz-mark { font-size: 1rem; text-align: center; }
+  .quiz-check-btn {
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
+    font-size: 0.86rem;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--orange-deep);
+    margin-top: 4px;
+  }
+  .quiz-check-btn:hover { transform: translateY(1px); box-shadow: 0 2px 0 var(--orange-deep); }
+  .quiz-check-btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--orange-deep); }
+  .quiz-score { font-size: 0.84rem; font-weight: 700; margin-left: 12px; }
+  .quiz-score.pass { color: #3f8c53; }
+  .quiz-score.fail { color: #c4523f; }
+  .quiz-answer {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    padding-left: 42px;
+  }
 
   /* ---------- HOW IT WORKS ---------- */
   .how {
@@ -717,10 +766,82 @@
       return;
     }
 
-    list.innerHTML = items.map((q, i) =>
-      `<div class="review-item"><span class="review-num">${i + 1}</span><div><div class="review-ko">${q.ko}</div><div class="review-en">${q.en}</div></div></div>`
-    ).join("");
+    list.innerHTML = items.map((q, i) => `
+      <div class="review-item" data-idx="${i}">
+        <div class="review-head">
+          <span class="review-num">${i + 1}</span>
+          <span class="review-ko">${q.ko}</span>
+        </div>
+        <div class="quiz-row">
+          <span class="quiz-tag">EN</span>
+          <input type="text" class="quiz-input" data-lang="en" placeholder="영어로 입력하세요" autocomplete="off">
+          <span class="quiz-mark" data-lang="en"></span>
+        </div>
+        <div class="quiz-row">
+          <span class="quiz-tag">ES</span>
+          <input type="text" class="quiz-input" data-lang="es" placeholder="스페인어로 입력하세요" autocomplete="off">
+          <span class="quiz-mark" data-lang="es"></span>
+        </div>
+        <div class="quiz-row">
+          <span class="quiz-tag">ZH</span>
+          <input type="text" class="quiz-input" data-lang="zh" placeholder="중국어로 입력하세요" autocomplete="off">
+          <span class="quiz-mark" data-lang="zh"></span>
+        </div>
+        <button class="quiz-check-btn" type="button">채점하기</button>
+        <span class="quiz-score" data-role="score"></span>
+        <div class="quiz-answers" style="display:none;"></div>
+      </div>
+    `).join("");
   }
+
+  function normalizeAnswer(s) {
+    return (s || "")
+      .toLowerCase()
+      .replace(/[.,!?¿¡。，、！？"'“”‘’()（）·\s]/g, "")
+      .trim();
+  }
+
+  document.getElementById("reviewList").addEventListener("click", (e) => {
+    const btn = e.target.closest(".quiz-check-btn");
+    if (!btn) return;
+    const item = btn.closest(".review-item");
+    const idx = Number(item.dataset.idx);
+
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
+    const todayIdx = indexForDate(todayMidnight);
+    const q = QUOTES.slice(0, todayIdx)[idx];
+
+    const langs = ["en", "es", "zh"];
+    let correctCount = 0;
+    const wrongAnswers = [];
+
+    langs.forEach((lang) => {
+      const input = item.querySelector(`.quiz-input[data-lang="${lang}"]`);
+      const mark = item.querySelector(`.quiz-mark[data-lang="${lang}"]`);
+      const isCorrect = normalizeAnswer(input.value) === normalizeAnswer(q[lang]);
+      input.classList.remove("correct", "incorrect");
+      input.classList.add(isCorrect ? "correct" : "incorrect");
+      mark.textContent = isCorrect ? "✅" : "❌";
+      if (isCorrect) {
+        correctCount += 1;
+      } else {
+        wrongAnswers.push(`<div class="quiz-answer">${lang.toUpperCase()} 정답: ${q[lang]}</div>`);
+      }
+    });
+
+    const scoreEl = item.querySelector('[data-role="score"]');
+    scoreEl.textContent = `${correctCount} / 3 정답`;
+    scoreEl.className = "quiz-score " + (correctCount === 3 ? "pass" : "fail");
+
+    const answersEl = item.querySelector(".quiz-answers");
+    if (wrongAnswers.length) {
+      answersEl.innerHTML = wrongAnswers.join("");
+      answersEl.style.display = "";
+    } else {
+      answersEl.style.display = "none";
+    }
+  });
 
   renderReviewList();
 
