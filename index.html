@@ -124,6 +124,24 @@
 
   .mascot-wrap { position: relative; display: flex; justify-content: center; }
   .mascot-wrap svg { width: min(280px, 90%); height: auto; overflow: visible; }
+  .hero-quote {
+    position: absolute;
+    left: 23.3%;
+    top: 43.5%;
+    width: 53.3%;
+    height: 28.2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: clamp(0.62rem, 2.1vw, 0.86rem);
+    line-height: 1.28;
+    padding: 4px 10px;
+    overflow: hidden;
+  }
 
   .sparkle { position: absolute; opacity: 0.9; }
 
@@ -555,7 +573,6 @@
         <path d="M136,94 Q150,102 164,94" stroke="var(--maroon)" stroke-width="4" fill="none" stroke-linecap="round"/>
         <rect x="40" y="118" width="220" height="164" rx="38" fill="var(--maroon)"/>
         <rect x="70" y="148" width="160" height="96" rx="18" fill="var(--cream)"/>
-        <text x="150" y="212" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="700" font-size="52" fill="var(--rose-light)">&#8220;</text>
         <circle cx="70" cy="148" r="7" fill="var(--rose-light)"/>
         <circle cx="230" cy="148" r="7" fill="var(--rose-light)"/>
         <circle cx="70" cy="244" r="7" fill="var(--rose-light)"/>
@@ -567,6 +584,7 @@
       </svg>
       <svg class="sparkle" style="top:6%; right:6%; width:26px; height:26px;" viewBox="0 0 24 24" fill="var(--white)"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"/></svg>
       <svg class="sparkle" style="bottom:14%; left:2%; width:18px; height:18px;" viewBox="0 0 24 24" fill="var(--orange)"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"/></svg>
+      <div class="hero-quote" id="heroQuote"></div>
     </div>
   </div>
   <div class="wave wave-bottom" style="color: var(--yellow);">
@@ -980,6 +998,20 @@
 
   renderReviewTabs();
   renderReviewList();
+
+  function renderHeroQuote() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const el = document.getElementById("heroQuote");
+    if (isRestDay(today)) {
+      const hName = holidayName(today);
+      el.textContent = hName ? hName + " 🌿" : "쉬는 날 🌿";
+      return;
+    }
+    el.textContent = QUOTES[indexForDate(today)].ko;
+  }
+
+  renderHeroQuote();
 
   let voices = [];
   function loadVoices() { voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
