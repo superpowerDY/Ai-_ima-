@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
 <title>오늘의 한마디</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,9 +52,9 @@
     max-width: 1080px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 0.85fr 1.15fr;
     align-items: center;
-    gap: 20px;
+    gap: 40px;
   }
 
   .badge {
@@ -122,73 +126,13 @@
   .cta:active { transform: translateY(6px); box-shadow: 0 0 0 var(--orange-deep); }
   .cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
-  .mascot-wrap { position: relative; display: flex; justify-content: center; }
-  .mascot-wrap svg { width: min(280px, 90%); height: auto; overflow: visible; }
-  .hero-quote {
-    position: absolute;
-    left: 23.3%;
-    top: 43.5%;
-    width: 53.3%;
-    height: 28.2%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 700;
-    color: var(--ink);
-    font-size: clamp(0.62rem, 2.1vw, 0.86rem);
-    line-height: 1.28;
-    padding: 4px 10px;
-    overflow: hidden;
-  }
+  .mascot-wrap { position: relative; }
 
   .sparkle { position: absolute; opacity: 0.9; }
 
   .wave { position: absolute; left: 0; width: 100%; line-height: 0; }
   .wave-bottom { bottom: -1px; }
   .wave svg { display: block; width: 100%; height: 90px; }
-
-  /* ---------- FEATURE / TOOL SECTION ---------- */
-  .feature {
-    background: var(--yellow);
-    padding: 90px 28px 130px;
-  }
-
-  .feature-inner {
-    max-width: 1080px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 56px;
-    align-items: start;
-  }
-
-  .feature-head .eyebrow {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 800;
-    font-size: 0.8rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--maroon);
-    margin-bottom: 14px;
-    display: block;
-  }
-  .feature-head h2 {
-    font-family: "Do Hyeon", sans-serif;
-    font-size: 2.5rem;
-    line-height: 1.15;
-    margin: 0 0 18px;
-    color: var(--ink);
-    text-wrap: balance;
-  }
-  .feature-head p {
-    font-size: 1.02rem;
-    line-height: 1.7;
-    color: var(--ink-soft);
-    font-weight: 500;
-    max-width: 34ch;
-  }
 
   /* quote card */
   .card {
@@ -534,8 +478,6 @@
     .hero-sub { margin-inline: auto; }
     .mascot-wrap { order: -1; margin-bottom: 10px; }
     .wordmark .line2 { font-size: 4rem; }
-    .feature-inner { grid-template-columns: 1fr; }
-    .feature-head p { margin-inline: auto; }
     .how-grid { grid-template-columns: 1fr; max-width: 320px; margin-inline: auto; }
   }
 
@@ -545,6 +487,8 @@
     .day-num { font-size: 3rem; }
   }
 </style>
+</head>
+<body>
 
 <section class="hero">
   <div class="hero-inner">
@@ -555,52 +499,9 @@
         <span class="line2">한마디</span>
       </h1>
       <p class="hero-sub">당신의 하루를 여는 동기부여 한 문장을 한국어·영어·스페인어·중국어 4개 언어로 매일 보여드려요.</p>
-      <a class="cta" href="#today">오늘의 문장 보기 ↓</a>
+      <a class="cta" href="#review">복습하러 가기 ↓</a>
     </div>
     <div class="mascot-wrap">
-      <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <ellipse cx="150" cy="322" rx="95" ry="13" fill="rgba(36,27,46,0.14)"/>
-        <rect x="58" y="268" width="34" height="52" rx="14" fill="var(--maroon-deep)"/>
-        <rect x="208" y="268" width="34" height="52" rx="14" fill="var(--maroon-deep)"/>
-        <rect x="118" y="12" width="8" height="32" rx="4" fill="var(--maroon)"/>
-        <rect x="174" y="12" width="8" height="32" rx="4" fill="var(--maroon)"/>
-        <circle cx="122" cy="12" r="10" fill="var(--orange)"/>
-        <circle cx="178" cy="12" r="10" fill="var(--orange)"/>
-        <rect x="95" y="38" width="110" height="88" rx="26" fill="var(--maroon)"/>
-        <rect x="116" y="60" width="68" height="44" rx="14" fill="var(--cream)"/>
-        <circle cx="138" cy="82" r="5" fill="var(--maroon)"/>
-        <circle cx="162" cy="82" r="5" fill="var(--maroon)"/>
-        <path d="M136,94 Q150,102 164,94" stroke="var(--maroon)" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <rect x="40" y="118" width="220" height="164" rx="38" fill="var(--maroon)"/>
-        <rect x="70" y="148" width="160" height="96" rx="18" fill="var(--cream)"/>
-        <circle cx="70" cy="148" r="7" fill="var(--rose-light)"/>
-        <circle cx="230" cy="148" r="7" fill="var(--rose-light)"/>
-        <circle cx="70" cy="244" r="7" fill="var(--rose-light)"/>
-        <circle cx="230" cy="244" r="7" fill="var(--rose-light)"/>
-        <rect x="10" y="150" width="30" height="72" rx="14" fill="var(--maroon)"/>
-        <rect x="260" y="150" width="30" height="72" rx="14" fill="var(--maroon)"/>
-        <circle cx="25" cy="222" r="14" fill="var(--maroon-deep)"/>
-        <circle cx="275" cy="222" r="14" fill="var(--maroon-deep)"/>
-      </svg>
-      <svg class="sparkle" style="top:6%; right:6%; width:26px; height:26px;" viewBox="0 0 24 24" fill="var(--white)"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"/></svg>
-      <svg class="sparkle" style="bottom:14%; left:2%; width:18px; height:18px;" viewBox="0 0 24 24" fill="var(--orange)"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"/></svg>
-      <div class="hero-quote" id="heroQuote"></div>
-    </div>
-  </div>
-  <div class="wave wave-bottom" style="color: var(--yellow);">
-    <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,45 C220,95 420,0 720,42 C1020,84 1240,10 1440,48 L1440,100 L0,100 Z" fill="currentColor"/></svg>
-  </div>
-</section>
-
-<section class="feature" id="today">
-  <div class="feature-inner">
-    <div class="feature-head">
-      <span class="eyebrow">Daily Line</span>
-      <h2>날짜가 바뀌면<br>문장도 바뀌어요</h2>
-      <p>서버 없이도 날짜 계산만으로 매일 자동으로 새 문장이 떠요. 화살표를 눌러 어제와 내일의 문장도 미리 볼 수 있어요.</p>
-    </div>
-
-    <div>
       <div class="card" id="card">
         <div class="card-inner">
           <div class="date-row">
@@ -628,9 +529,8 @@
       </div>
     </div>
   </div>
-
-  <div class="wave wave-bottom" style="color: var(--cream);">
-    <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,50 C260,5 480,95 760,50 C1040,5 1220,90 1440,40 L1440,100 L0,100 Z" fill="currentColor"/></svg>
+  <div class="wave wave-bottom" style="color: var(--white);">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,45 C220,95 420,0 720,42 C1020,84 1240,10 1440,48 L1440,100 L0,100 Z" fill="currentColor"/></svg>
   </div>
 </section>
 
@@ -999,20 +899,6 @@
   renderReviewTabs();
   renderReviewList();
 
-  function renderHeroQuote() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const el = document.getElementById("heroQuote");
-    if (isRestDay(today)) {
-      const hName = holidayName(today);
-      el.textContent = hName ? hName + " 🌿" : "쉬는 날 🌿";
-      return;
-    }
-    el.textContent = QUOTES[indexForDate(today)].ko;
-  }
-
-  renderHeroQuote();
-
   let voices = [];
   function loadVoices() { voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
   if ("speechSynthesis" in window) {
@@ -1090,5 +976,17 @@
     });
   }
 
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const target = document.querySelector(a.getAttribute("href"));
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.pushState(null, "", a.getAttribute("href"));
+    });
+  });
+
   render(false);
 </script>
+</body>
+</html>
