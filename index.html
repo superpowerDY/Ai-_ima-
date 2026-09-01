@@ -344,8 +344,37 @@
     text-align: center;
     font-size: 0.88rem;
     color: var(--ink-soft);
-    margin: 0 0 24px;
+    margin: 0 0 20px;
   }
+  .review-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+  .review-tab {
+    border: 2px solid var(--maroon);
+    background: transparent;
+    color: var(--maroon);
+    padding: 7px 18px;
+    border-radius: 999px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .review-tab.active { background: var(--maroon); color: var(--white); }
+  .review-shuffle {
+    display: block;
+    margin: 0 auto 14px;
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
+    font-size: 0.86rem;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--orange-deep);
+  }
+  .review-shuffle:hover { transform: translateY(1px); box-shadow: 0 2px 0 var(--orange-deep); }
+  .review-shuffle:active { transform: translateY(3px); box-shadow: 0 0 0 var(--orange-deep); }
   .review-list { display: flex; flex-direction: column; gap: 14px; max-height: 560px; overflow-y: auto; padding-right: 4px; }
   .review-item {
     background: var(--cream);
@@ -590,7 +619,8 @@
 <section class="review" id="review">
   <div class="review-inner">
     <h3>복습 Zone</h3>
-    <p class="review-sub">이미 지나간 학습일의 문장을 다시 볼 수 있어요.</p>
+    <p class="review-sub">스스로 입력해서 채점해보세요.</p>
+    <div class="review-tabs" id="reviewTabs"></div>
     <div class="review-list" id="reviewList"></div>
   </div>
 </section>
@@ -762,22 +792,38 @@
   document.getElementById("nextBtn").addEventListener("click", () => { offset += 1; render(true); });
   document.getElementById("todayBtn").addEventListener("click", () => { offset = 0; render(true); });
 
-  function renderReviewList() {
-    const todayMidnight = new Date();
-    todayMidnight.setHours(0, 0, 0, 0);
-    const todayIdx = indexForDate(todayMidnight);
-    const list = document.getElementById("reviewList");
-    const items = QUOTES.slice(0, todayIdx);
+  function getTodayIdx() {
+    const t = new Date();
+    t.setHours(0, 0, 0, 0);
+    return indexForDate(t);
+  }
 
-    if (!items.length) {
-      list.innerHTML = '<div class="review-empty">아직 복습할 문장이 없어요.</div>';
-      return;
+  // 이번주(월요일~오늘 이전) 학습일들의 QUOTES 인덱스를 날짜순으로 반환
+  function getThisWeekIndices() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dow = today.getDay(); // 0=일 ... 6=토
+    const mondayOffset = dow === 0 ? -6 : 1 - dow;
+    const monday = new Date(today);
+    monday.setDate(monday.getDate() + mondayOffset);
+
+    const result = [];
+    const cur = new Date(monday);
+    while (cur < today) {
+      if (!isRestDay(cur)) result.push(indexForDate(cur));
+      cur.setDate(cur.getDate() + 1);
     }
+    return result;
+  }
 
-    list.innerHTML = items.map((q, i) => `
-      <div class="review-item" data-idx="${i}">
+  let randomQuoteIdx = null;
+
+  function reviewItemHtml(quoteIdx, num) {
+    const q = QUOTES[quoteIdx];
+    return `
+      <div class="review-item" data-quote-idx="${quoteIdx}">
         <div class="review-head">
-          <span class="review-num">${i + 1}</span>
+          ${num !== null ? `<span class="review-num">${num}</span>` : ""}
           <span class="review-ko">${q.ko}</span>
         </div>
         <div class="quiz-row">
@@ -799,7 +845,52 @@
         <span class="quiz-score" data-role="score"></span>
         <div class="quiz-answers" style="display:none;"></div>
       </div>
-    `).join("");
+    `;
+  }
+
+  let reviewTab = "yesterday";
+
+  function renderReviewTabs() {
+    const defs = [["yesterday", "어제꺼 복습"], ["random", "이전문장 랜덤 복습"], ["week", "이번주 복습"]];
+    const tabs = document.getElementById("reviewTabs");
+    tabs.innerHTML = defs.map(([key, label]) =>
+      `<button class="review-tab${reviewTab === key ? " active" : ""}" data-tab="${key}">${label}</button>`
+    ).join("");
+    tabs.querySelectorAll(".review-tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (reviewTab === btn.dataset.tab) return;
+        reviewTab = btn.dataset.tab;
+        renderReviewTabs();
+        renderReviewList();
+      });
+    });
+  }
+
+  function renderReviewList() {
+    const list = document.getElementById("reviewList");
+    const todayIdx = getTodayIdx();
+    const emptyMsg = '<div class="review-empty">아직 복습할 문장이 없어요.</div>';
+
+    if (reviewTab === "yesterday") {
+      if (todayIdx === 0) { list.innerHTML = emptyMsg; return; }
+      const qi = (todayIdx - 1 + QUOTES.length) % QUOTES.length;
+      list.innerHTML = reviewItemHtml(qi, null);
+      return;
+    }
+
+    if (reviewTab === "random") {
+      if (todayIdx === 0) { list.innerHTML = emptyMsg; return; }
+      if (randomQuoteIdx === null) randomQuoteIdx = Math.floor(Math.random() * todayIdx);
+      list.innerHTML =
+        '<button class="review-shuffle" type="button">🔀 다른 문장 뽑기</button>' +
+        reviewItemHtml(randomQuoteIdx, null);
+      return;
+    }
+
+    // reviewTab === "week"
+    const items = getThisWeekIndices();
+    if (!items.length) { list.innerHTML = emptyMsg; return; }
+    list.innerHTML = items.map((qi, i) => reviewItemHtml(qi, i + 1)).join("");
   }
 
   function normalizeAnswer(s, lang) {
@@ -841,15 +932,20 @@
   }
 
   document.getElementById("reviewList").addEventListener("click", (e) => {
+    if (e.target.closest(".review-shuffle")) {
+      const todayIdx = getTodayIdx();
+      if (todayIdx <= 1) { renderReviewList(); return; }
+      let next;
+      do { next = Math.floor(Math.random() * todayIdx); } while (next === randomQuoteIdx);
+      randomQuoteIdx = next;
+      renderReviewList();
+      return;
+    }
+
     const btn = e.target.closest(".quiz-check-btn");
     if (!btn) return;
     const item = btn.closest(".review-item");
-    const idx = Number(item.dataset.idx);
-
-    const todayMidnight = new Date();
-    todayMidnight.setHours(0, 0, 0, 0);
-    const todayIdx = indexForDate(todayMidnight);
-    const q = QUOTES.slice(0, todayIdx)[idx];
+    const q = QUOTES[Number(item.dataset.quoteIdx)];
 
     const langs = ["en", "es", "zh"];
     let correctCount = 0;
@@ -882,6 +978,7 @@
     }
   });
 
+  renderReviewTabs();
   renderReviewList();
 
   let voices = [];
