@@ -794,11 +794,13 @@
     `).join("");
   }
 
-  function normalizeAnswer(s) {
-    return (s || "")
-      .toLowerCase()
-      .replace(/[.,!?¿¡。，、！？"'“”‘’()（）·\s]/g, "")
-      .trim();
+  function normalizeAnswer(s, lang) {
+    let out = (s || "").toLowerCase().trim();
+    if (lang === "es") {
+      // 스페인어는 강세 표시(á é í ó ú) 없이 입력해도 정답 처리 — ñ는 별도 글자이므로 유지
+      out = out.normalize("NFD").replace(/́/g, "").normalize("NFC");
+    }
+    return out.replace(/[.,!?¿¡。，、！？"'“”‘’()（）·\s]/g, "");
   }
 
   document.getElementById("reviewList").addEventListener("click", (e) => {
@@ -819,7 +821,7 @@
     langs.forEach((lang) => {
       const input = item.querySelector(`.quiz-input[data-lang="${lang}"]`);
       const mark = item.querySelector(`.quiz-mark[data-lang="${lang}"]`);
-      const isCorrect = normalizeAnswer(input.value) === normalizeAnswer(q[lang]);
+      const isCorrect = normalizeAnswer(input.value, lang) === normalizeAnswer(q[lang], lang);
       input.classList.remove("correct", "incorrect");
       input.classList.add(isCorrect ? "correct" : "incorrect");
       mark.textContent = isCorrect ? "✅" : "❌";
