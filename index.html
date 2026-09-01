@@ -407,6 +407,9 @@
     margin-top: 2px;
     padding-left: 42px;
   }
+  .quiz-answer-correct {
+    color: #b9b2a8;
+  }
   .wrong-part {
     color: #d1503f;
     text-decoration: underline;
@@ -867,7 +870,7 @@
 
     const langs = ["en", "es", "zh"];
     let correctCount = 0;
-    const wrongAnswers = [];
+    const answerLines = [];
 
     langs.forEach((lang) => {
       const input = item.querySelector(`.quiz-input[data-lang="${lang}"]`);
@@ -878,8 +881,9 @@
       mark.textContent = isCorrect ? "✅" : "❌";
       if (isCorrect) {
         correctCount += 1;
+        answerLines.push(`<div class="quiz-answer quiz-answer-correct">${lang.toUpperCase()} 정답: ✓ ${escapeHtml(q[lang])}</div>`);
       } else {
-        wrongAnswers.push(`<div class="quiz-answer">${lang.toUpperCase()} 정답: ${buildDiffHtml(q[lang], input.value, lang)}</div>`);
+        answerLines.push(`<div class="quiz-answer">${lang.toUpperCase()} 정답: ${buildDiffHtml(q[lang], input.value, lang)}</div>`);
       }
     });
 
@@ -888,12 +892,8 @@
     scoreEl.className = "quiz-score " + (correctCount === 3 ? "pass" : "fail");
 
     const answersEl = item.querySelector(".quiz-answers");
-    if (wrongAnswers.length) {
-      answersEl.innerHTML = wrongAnswers.join("");
-      answersEl.style.display = "";
-    } else {
-      answersEl.style.display = "none";
-    }
+    answersEl.innerHTML = answerLines.join("");
+    answersEl.style.display = "";
   });
 
   renderReviewTabs();
