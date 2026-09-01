@@ -216,26 +216,19 @@
 
   .btn-group { display: flex; gap: 8px; flex-shrink: 0; }
   .papago-btn {
-    background: #19ce60;
-    color: var(--white);
-    border: none;
+    background: var(--white) url("data:image/png;base64,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") center/20px no-repeat;
+    border: 2px solid #eee1cf;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     cursor: pointer;
-    font-family: "Baloo 2", sans-serif;
-    font-weight: 800;
-    font-size: 0.82rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 0;
     flex-shrink: 0;
-    box-shadow: 0 3px 0 #12a349;
+    box-shadow: 0 3px 0 #d8c9ae;
     transition: transform 0.1s ease, box-shadow 0.1s ease;
   }
-  .papago-btn:hover { transform: translateY(1px); box-shadow: 0 2px 0 #12a349; }
-  .papago-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #12a349; }
+  .papago-btn:hover { transform: translateY(1px); box-shadow: 0 2px 0 #d8c9ae; }
+  .papago-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #d8c9ae; }
   .papago-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
   .card.flip { animation: pageflip 0.45s cubic-bezier(.6,.05,.4,.95); }
@@ -518,10 +511,10 @@
           </div>
 
           <div class="lines" id="lines">
-            <div class="line ko"><span class="tag">KO</span><span class="txt" id="txt-ko"></span><div class="btn-group"><button class="speak-btn" data-target="txt-ko" data-lang="ko-KR" data-gtl="ko" aria-label="한국어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-ko" data-gtl="ko" aria-label="파파고에서 한국어 발음 듣기">P</button></div></div>
-            <div class="line en"><span class="tag">EN</span><span class="txt" id="txt-en"></span><div class="btn-group"><button class="speak-btn" data-target="txt-en" data-lang="en-US" data-gtl="en" aria-label="영어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-en" data-gtl="en" aria-label="파파고에서 영어 발음 듣기">P</button></div></div>
-            <div class="line es"><span class="tag">ES</span><span class="txt" id="txt-es"></span><div class="btn-group"><button class="speak-btn" data-target="txt-es" data-lang="es-ES" data-gtl="es" aria-label="스페인어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-es" data-gtl="es" aria-label="파파고에서 스페인어 발음 듣기">P</button></div></div>
-            <div class="line zh"><span class="tag">ZH</span><span class="zh-wrap"><span class="txt" id="txt-zh"></span><span class="pinyin" id="txt-zh-py"></span></span><div class="btn-group"><button class="speak-btn" data-target="txt-zh" data-lang="zh-CN" data-gtl="zh-CN" aria-label="중국어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-zh" data-gtl="zh-CN" aria-label="파파고에서 중국어 발음 듣기">P</button></div></div>
+            <div class="line ko"><span class="tag">KO</span><span class="txt" id="txt-ko"></span><div class="btn-group"><button class="speak-btn" data-target="txt-ko" data-lang="ko-KR" data-gtl="ko" aria-label="한국어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-ko" data-gtl="ko" aria-label="파파고에서 한국어 발음 듣기"></button></div></div>
+            <div class="line en"><span class="tag">EN</span><span class="txt" id="txt-en"></span><div class="btn-group"><button class="speak-btn" data-target="txt-en" data-lang="en-US" data-gtl="en" aria-label="영어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-en" data-gtl="en" aria-label="파파고에서 영어 발음 듣기"></button></div></div>
+            <div class="line es"><span class="tag">ES</span><span class="txt" id="txt-es"></span><div class="btn-group"><button class="speak-btn" data-target="txt-es" data-lang="es-ES" data-gtl="es" aria-label="스페인어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-es" data-gtl="es" aria-label="파파고에서 스페인어 발음 듣기"></button></div></div>
+            <div class="line zh"><span class="tag">ZH</span><span class="zh-wrap"><span class="txt" id="txt-zh"></span><span class="pinyin" id="txt-zh-py"></span></span><div class="btn-group"><button class="speak-btn" data-target="txt-zh" data-lang="zh-CN" data-gtl="zh-CN" aria-label="중국어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-zh" data-gtl="zh-CN" aria-label="파파고에서 중국어 발음 듣기"></button></div></div>
           </div>
           <div class="rest-msg" id="restMsg" style="display:none;"></div>
         </div>
