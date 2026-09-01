@@ -22,6 +22,8 @@
     --maroon-deep: #5c2d42;
     --rose-light: #d99cb5;
     --white: #fffaf3;
+    --lime: #6fe000;
+    --lime-deep: #4a9c00;
   }
 
   * { box-sizing: border-box; }
@@ -109,8 +111,8 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: var(--orange);
-    color: var(--white);
+    background: var(--lime);
+    color: var(--ink);
     font-family: "Noto Sans KR", sans-serif;
     font-weight: 700;
     font-size: 0.98rem;
@@ -119,11 +121,11 @@
     text-decoration: none;
     border: none;
     cursor: pointer;
-    box-shadow: 0 6px 0 var(--orange-deep);
+    box-shadow: 0 6px 0 var(--lime-deep);
     transition: transform 0.12s ease, box-shadow 0.12s ease;
   }
-  .cta:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--orange-deep); }
-  .cta:active { transform: translateY(6px); box-shadow: 0 0 0 var(--orange-deep); }
+  .cta:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--lime-deep); }
+  .cta:active { transform: translateY(6px); box-shadow: 0 0 0 var(--lime-deep); }
   .cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
   .mascot-wrap { position: relative; }
