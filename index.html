@@ -249,6 +249,30 @@
   .speak-btn.speaking { background: var(--orange); box-shadow: 0 3px 0 var(--orange-deep); }
   body.no-tts .speak-btn { display: none; }
 
+  .btn-group { display: flex; gap: 8px; flex-shrink: 0; }
+  .papago-btn {
+    background: #19ce60;
+    color: var(--white);
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 800;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+    box-shadow: 0 3px 0 #12a349;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .papago-btn:hover { transform: translateY(1px); box-shadow: 0 2px 0 #12a349; }
+  .papago-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #12a349; }
+  .papago-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
   .card.flip { animation: pageflip 0.45s cubic-bezier(.6,.05,.4,.95); }
   @keyframes pageflip {
     0%   { transform: scale(1) rotate(0deg); }
@@ -442,10 +466,10 @@
           </div>
 
           <div class="lines" id="lines">
-            <div class="line ko"><span class="tag">KO</span><span class="txt" id="txt-ko"></span><button class="speak-btn" data-target="txt-ko" data-lang="ko-KR" data-gtl="ko" aria-label="한국어 발음 듣기">🔊</button></div>
-            <div class="line en"><span class="tag">EN</span><span class="txt" id="txt-en"></span><button class="speak-btn" data-target="txt-en" data-lang="en-US" data-gtl="en" aria-label="영어 발음 듣기">🔊</button></div>
-            <div class="line es"><span class="tag">ES</span><span class="txt" id="txt-es"></span><button class="speak-btn" data-target="txt-es" data-lang="es-ES" data-gtl="es" aria-label="스페인어 발음 듣기">🔊</button></div>
-            <div class="line zh"><span class="tag">ZH</span><span class="zh-wrap"><span class="txt" id="txt-zh"></span><span class="pinyin" id="txt-zh-py"></span></span><button class="speak-btn" data-target="txt-zh" data-lang="zh-CN" data-gtl="zh-CN" aria-label="중국어 발음 듣기">🔊</button></div>
+            <div class="line ko"><span class="tag">KO</span><span class="txt" id="txt-ko"></span><div class="btn-group"><button class="speak-btn" data-target="txt-ko" data-lang="ko-KR" data-gtl="ko" aria-label="한국어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-ko" data-gtl="ko" aria-label="파파고에서 한국어 발음 듣기">P</button></div></div>
+            <div class="line en"><span class="tag">EN</span><span class="txt" id="txt-en"></span><div class="btn-group"><button class="speak-btn" data-target="txt-en" data-lang="en-US" data-gtl="en" aria-label="영어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-en" data-gtl="en" aria-label="파파고에서 영어 발음 듣기">P</button></div></div>
+            <div class="line es"><span class="tag">ES</span><span class="txt" id="txt-es"></span><div class="btn-group"><button class="speak-btn" data-target="txt-es" data-lang="es-ES" data-gtl="es" aria-label="스페인어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-es" data-gtl="es" aria-label="파파고에서 스페인어 발음 듣기">P</button></div></div>
+            <div class="line zh"><span class="tag">ZH</span><span class="zh-wrap"><span class="txt" id="txt-zh"></span><span class="pinyin" id="txt-zh-py"></span></span><div class="btn-group"><button class="speak-btn" data-target="txt-zh" data-lang="zh-CN" data-gtl="zh-CN" aria-label="중국어 발음 듣기">🔊</button><button class="papago-btn" data-target="txt-zh" data-gtl="zh-CN" aria-label="파파고에서 중국어 발음 듣기">P</button></div></div>
           </div>
         </div>
       </div>
@@ -580,17 +604,80 @@
   document.getElementById("nextBtn").addEventListener("click", () => { offset += 1; render(true); });
   document.getElementById("todayBtn").addEventListener("click", () => { offset = 0; render(true); });
 
+  let voices = [];
+  function loadVoices() { voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+  if ("speechSynthesis" in window) {
+    loadVoices();
+    if ("onvoiceschanged" in window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }
+
+  function pickVoice(langCode) {
+    if (!voices.length) loadVoices();
+    const lower = langCode.toLowerCase();
+    const prefix = lower.split("-")[0];
+    const candidates = voices.filter((v) => {
+      const vl = v.lang.toLowerCase();
+      return vl === lower || vl.startsWith(prefix + "-") || vl === prefix || (prefix === "zh" && vl.startsWith("zh"));
+    });
+    if (!candidates.length) return null;
+    const score = (v) => (/premium|enhanced|neural/i.test(v.name) ? 2 : /siri/i.test(v.name) ? 1 : 0);
+    candidates.sort((a, b) => score(b) - score(a));
+    return candidates[0];
+  }
+
+  function speakSystem(text, langCode, onDone) {
+    if (!("speechSynthesis" in window)) { onDone(); return; }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    const voice = pickVoice(langCode);
+    if (voice) { utter.voice = voice; utter.lang = voice.lang; }
+    else { utter.lang = langCode; }
+    utter.rate = 0.95;
+    utter.onend = utter.onerror = onDone;
+    window.speechSynthesis.speak(utter);
+  }
+
+  let currentAudio = null;
+
   if (document.getElementById("lines")) {
     document.getElementById("lines").addEventListener("click", (e) => {
+      const papagoBtn = e.target.closest(".papago-btn");
+      if (papagoBtn) {
+        const text = document.getElementById(papagoBtn.dataset.target).textContent;
+        if (!text) return;
+        const sl = papagoBtn.dataset.gtl;
+        const tl = sl === "en" ? "ko" : "en";
+        const url = "https://papago.naver.com/?sl=" + sl + "&tl=" + tl + "&text=" + encodeURIComponent(text) + "&hn=1";
+        window.open(url, "_blank");
+        return;
+      }
+
       const btn = e.target.closest(".speak-btn");
       if (!btn) return;
       const text = document.getElementById(btn.dataset.target).textContent;
       if (!text) return;
 
-      const sl = btn.dataset.gtl;
-      const tl = sl === "en" ? "ko" : "en";
-      const url = "https://papago.naver.com/?sl=" + sl + "&tl=" + tl + "&text=" + encodeURIComponent(text) + "&hn=1";
-      window.open(url, "_blank");
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      document.querySelectorAll(".speak-btn.speaking").forEach((b) => b.classList.remove("speaking"));
+      btn.classList.add("speaking");
+      const done = () => btn.classList.remove("speaking");
+
+      const voice = pickVoice(btn.dataset.lang);
+      if (voice) {
+        speakSystem(text, btn.dataset.lang, done);
+        return;
+      }
+
+      const url = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + encodeURIComponent(text) + "&tl=" + btn.dataset.gtl + "&client=tw-ob";
+      const audio = new Audio(url);
+      currentAudio = audio;
+      let settled = false;
+      audio.onended = () => { if (!settled) { settled = true; done(); } };
+      audio.onerror = () => { if (!settled) { settled = true; speakSystem(text, btn.dataset.lang, done); } };
+      audio.play().catch(() => { if (!settled) { settled = true; speakSystem(text, btn.dataset.lang, done); } });
     });
   }
 
