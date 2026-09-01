@@ -580,43 +580,6 @@
   document.getElementById("nextBtn").addEventListener("click", () => { offset += 1; render(true); });
   document.getElementById("todayBtn").addEventListener("click", () => { offset = 0; render(true); });
 
-  let voices = [];
-  function loadVoices() { voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
-  if ("speechSynthesis" in window) {
-    loadVoices();
-    if ("onvoiceschanged" in window.speechSynthesis) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-  }
-
-  function pickVoice(langCode) {
-    if (!voices.length) loadVoices();
-    const lower = langCode.toLowerCase();
-    const prefix = lower.split("-")[0];
-    const candidates = voices.filter((v) => {
-      const vl = v.lang.toLowerCase();
-      return vl === lower || vl.startsWith(prefix + "-") || vl === prefix || (prefix === "zh" && vl.startsWith("zh"));
-    });
-    if (!candidates.length) return null;
-    const score = (v) => (/premium|enhanced|neural/i.test(v.name) ? 2 : /siri/i.test(v.name) ? 1 : 0);
-    candidates.sort((a, b) => score(b) - score(a));
-    return candidates[0];
-  }
-
-  function speakSystem(text, langCode, onDone) {
-    if (!("speechSynthesis" in window)) { onDone(); return; }
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    const voice = pickVoice(langCode);
-    if (voice) { utter.voice = voice; utter.lang = voice.lang; }
-    else { utter.lang = langCode; }
-    utter.rate = 0.95;
-    utter.onend = utter.onerror = onDone;
-    window.speechSynthesis.speak(utter);
-  }
-
-  let currentAudio = null;
-
   if (document.getElementById("lines")) {
     document.getElementById("lines").addEventListener("click", (e) => {
       const btn = e.target.closest(".speak-btn");
@@ -624,25 +587,10 @@
       const text = document.getElementById(btn.dataset.target).textContent;
       if (!text) return;
 
-      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-      document.querySelectorAll(".speak-btn.speaking").forEach((b) => b.classList.remove("speaking"));
-      btn.classList.add("speaking");
-      const done = () => btn.classList.remove("speaking");
-
-      const voice = pickVoice(btn.dataset.lang);
-      if (voice) {
-        speakSystem(text, btn.dataset.lang, done);
-        return;
-      }
-
-      const url = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + encodeURIComponent(text) + "&tl=" + btn.dataset.gtl + "&client=tw-ob";
-      const audio = new Audio(url);
-      currentAudio = audio;
-      let settled = false;
-      audio.onended = () => { if (!settled) { settled = true; done(); } };
-      audio.onerror = () => { if (!settled) { settled = true; speakSystem(text, btn.dataset.lang, done); } };
-      audio.play().catch(() => { if (!settled) { settled = true; speakSystem(text, btn.dataset.lang, done); } });
+      const sl = btn.dataset.gtl;
+      const tl = sl === "en" ? "ko" : "en";
+      const url = "https://papago.naver.com/?sl=" + sl + "&tl=" + tl + "&text=" + encodeURIComponent(text) + "&hn=1";
+      window.open(url, "_blank");
     });
   }
 
