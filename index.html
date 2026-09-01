@@ -416,6 +416,14 @@
     margin-top: 2px;
     padding-left: 42px;
   }
+  .wrong-part {
+    color: #d1503f;
+    text-decoration: underline;
+    text-decoration-color: #d1503f;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+    font-weight: 700;
+  }
 
   /* ---------- HOW IT WORKS ---------- */
   .how {
@@ -803,6 +811,35 @@
     return out.replace(/[.,!?¿¡。，、！？"'“”‘’()（）·\s]/g, "");
   }
 
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  const PUNCT_RE = /[.,!?¿¡。，、！？"'“”‘’()（）·\s]/;
+
+  // 정답 텍스트를 표시하되, 사용자가 틀리게 입력한 부분만 빨간 밑줄로 표시
+  function buildDiffHtml(correctText, userText, lang) {
+    if (lang === "zh") {
+      const correctChars = correctText.split("");
+      const userCore = userText.split("").filter((ch) => !PUNCT_RE.test(ch));
+      let coreIdx = 0;
+      return correctChars.map((ch) => {
+        if (PUNCT_RE.test(ch)) return escapeHtml(ch);
+        const userCh = userCore[coreIdx] || "";
+        coreIdx += 1;
+        const match = normalizeAnswer(ch, lang) === normalizeAnswer(userCh, lang);
+        return match ? escapeHtml(ch) : `<span class="wrong-part">${escapeHtml(ch)}</span>`;
+      }).join("");
+    }
+
+    const correctWords = correctText.split(/\s+/).filter(Boolean);
+    const userWords = userText.trim().split(/\s+/).filter(Boolean);
+    return correctWords.map((w, i) => {
+      const match = normalizeAnswer(w, lang) === normalizeAnswer(userWords[i] || "", lang);
+      return match ? escapeHtml(w) : `<span class="wrong-part">${escapeHtml(w)}</span>`;
+    }).join(" ");
+  }
+
   document.getElementById("reviewList").addEventListener("click", (e) => {
     const btn = e.target.closest(".quiz-check-btn");
     if (!btn) return;
@@ -828,7 +865,7 @@
       if (isCorrect) {
         correctCount += 1;
       } else {
-        wrongAnswers.push(`<div class="quiz-answer">${lang.toUpperCase()} 정답: ${q[lang]}</div>`);
+        wrongAnswers.push(`<div class="quiz-answer">${lang.toUpperCase()} 정답: ${buildDiffHtml(q[lang], input.value, lang)}</div>`);
       }
     });
 
